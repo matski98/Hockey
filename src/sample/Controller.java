@@ -58,7 +58,7 @@ public class Controller implements Initializable {
 
     @FXML private ToggleButton ball_sign_toggle;
     private Electron ball = new Electron( 7 );
-    Arrow a;
+    //Arrow a;
 
 
     @Override
@@ -79,8 +79,8 @@ public class Controller implements Initializable {
         field.getChildren().add(post1);
         field.getChildren().add(post2);
         field.getChildren().add(backpost);
-        a = new Arrow();
-        field.getChildren().add(a);
+        //a = new Arrow();
+        //field.getChildren().add(a);
 
         addRectangles();
         for(Rectangle rect: er){rect.setFill(Color.TRANSPARENT);}
