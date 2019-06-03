@@ -154,11 +154,17 @@ public class Controller implements Initializable {
             public void handle(long currentNanoTime)
             {
                 double[] results = DetermineForce(sources, this);
+                if(results[2]<14){   //collision check
+                    ball.setCenterX(ball.plocX);
+                    ball.setCenterY(ball.plocY);
+                    this.stop();
+                    messages.setText("You Lost");
+                    mode = 2;
+                }
                 change_electron(results);
                 ball.change();
                 ball.setCenterX(ball.locX);
                 ball.setCenterY(ball.locY);
-                //if(results[0]>10||results[0]<-10||results[1]>10||results[1]<-10)
                 display_arrow(results);
                 boundary_checker(this);
                 collision_checker(this);
@@ -231,17 +237,11 @@ public class Controller implements Initializable {
     }
 
     private double[] DetermineForce(ArrayList<Source> sources, AnimationTimer timer){
-        double[] results = {0,0};
+        double[] results = {0,0,14};
         for(Source source: sources){
             final int k = 100000000;   //constant required for long range
             double r = Math.sqrt(Math.pow(ball.locX - source.getCenterX(),2)+Math.pow(ball.locY - source.getCenterY(),2))/1.0;
-            if(r<14){   //collision check
-                ball.setCenterX(ball.plocX);
-                ball.setCenterY(ball.plocY);
-                timer.stop();
-                messages.setText("You Lost");
-                mode = 2;
-            }
+            results[2]=r;
             double sinus = (source.getCenterX() - ball.locX)/r;
             double cosin = (source.getCenterY() - ball.locY)/r;
 
