@@ -60,7 +60,7 @@ public class Controller implements Initializable {
     @FXML private ToggleButton ball_sign_toggle;
     private Electron ball = new Electron( 7 );
 
-    Arrow a = new Arrow();
+    Arrow a;
 
     @Override
     public void initialize(URL url, ResourceBundle resource){
@@ -80,6 +80,7 @@ public class Controller implements Initializable {
         field.getChildren().add(post1);
         field.getChildren().add(post2);
         field.getChildren().add(backpost);
+        a = new Arrow();
         field.getChildren().add(a);
 
         addRectangles();
@@ -195,6 +196,8 @@ public class Controller implements Initializable {
                 sources.clear();
                 messages.setText("");
                 mode = 0;
+                double [] results = {0,0};
+                display_arrow(results);
                 timer.stop();
             }
         });
@@ -213,6 +216,10 @@ public class Controller implements Initializable {
     private void display_arrow(double[] results){
         a.setStartX(ball.locX);
         a.setStartY(ball.locY);
+        if(results[0]<15&&results[0]>-15&&results[1]<15&&results[1]>-15) {
+            results[0] = 0;
+            results[1] = 0;
+        }
         a.setEndX(ball.locX+results[0]);
         a.setEndY(ball.locY+results[1]);
     }
