@@ -60,6 +60,8 @@ public class Controller implements Initializable {
     @FXML private ToggleButton ball_sign_toggle;
     private Electron ball = new Electron( 7 );
 
+    Arrow a = new Arrow();
+
     @Override
     public void initialize(URL url, ResourceBundle resource){
 
@@ -78,6 +80,7 @@ public class Controller implements Initializable {
         field.getChildren().add(post1);
         field.getChildren().add(post2);
         field.getChildren().add(backpost);
+        field.getChildren().add(a);
 
         addRectangles();
         for(Rectangle rect: er){rect.setFill(Color.TRANSPARENT);}
@@ -154,6 +157,8 @@ public class Controller implements Initializable {
                 ball.change();
                 ball.setCenterX(ball.locX);
                 ball.setCenterY(ball.locY);
+                //if(results[0]>10||results[0]<-10||results[1]>10||results[1]<-10)
+                display_arrow(results);
                 boundary_checker(this);
                 collision_checker(this);
                 goal_check(post1,post2,backpost,this);
@@ -205,8 +210,11 @@ public class Controller implements Initializable {
         });
     }
 
-    private void display_arrow(){
-        ;
+    private void display_arrow(double[] results){
+        a.setStartX(ball.locX);
+        a.setStartY(ball.locY);
+        a.setEndX(ball.locX+results[0]);
+        a.setEndY(ball.locY+results[1]);
     }
 
     private void change_electron(double[] results){
@@ -221,8 +229,8 @@ public class Controller implements Initializable {
             final int k = 100000000;   //constant required for long range
             double r = Math.sqrt(Math.pow(ball.locX - source.getCenterX(),2)+Math.pow(ball.locY - source.getCenterY(),2))/1.0;
             if(r<14){   //collision check
-                ball.locX=ball.plocX;
-                ball.locY=ball.plocY;
+                ball.setCenterX(ball.plocX);
+                ball.setCenterY(ball.plocY);
                 timer.stop();
                 messages.setText("You Lost");
                 mode = 2;
@@ -271,8 +279,8 @@ public class Controller implements Initializable {
             for(Rectangle rect: mr){
                 Shape intersect = Shape.intersect(rect, ball);
                 if (intersect.getBoundsInLocal().getWidth() != -1) {
-                    ball.locX=ball.plocX;
-                    ball.locY=ball.plocY;
+                    ball.setCenterX(ball.plocX);
+                    ball.setCenterY(ball.plocY);
                     timer.stop();
                     messages.setText("You Lost");
                     mode = 2;
@@ -283,8 +291,8 @@ public class Controller implements Initializable {
             for(Rectangle rect: hr){
                 Shape intersect = Shape.intersect(rect, ball);
                 if (intersect.getBoundsInLocal().getWidth() != -1) {
-                    ball.locX=ball.plocX;
-                    ball.locY=ball.plocY;
+                    ball.setCenterX(ball.plocX);
+                    ball.setCenterY(ball.plocY);
                     timer.stop();
                     messages.setText("You Lost");
                     mode = 2;
@@ -307,6 +315,8 @@ public class Controller implements Initializable {
     }
 
     private void win(AnimationTimer timer){
+        ball.locX=ball.plocX;
+        ball.locY=ball.plocY;
         timer.stop();
         messages.setText("You Win");
         mode = 2;
@@ -314,14 +324,13 @@ public class Controller implements Initializable {
 
     private void boundary_checker(AnimationTimer timer){
         if(ball.locX < 0 || ball.locX > 1200 || ball.locY < 0 || ball.locY > 800){
-            ball.locX=ball.plocX;
-            ball.locY=ball.plocY;
+            ball.setCenterX(ball.plocX);
+            ball.setCenterY(ball.plocY);
             timer.stop();
             messages.setText("You lost");
             mode = 2;
         }
 
     }
-
 
 }
